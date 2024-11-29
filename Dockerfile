@@ -1,20 +1,18 @@
-FROM node:20.5.0
+FROM node:14
 
-WORKDIR /src
+WORKDIR /app
 
-COPY . .
+COPY package*.json ./
 
 RUN npm install
 
-#RUN npm install --quiet --no-optional --no-fund --loglevel=error && \
-   # npm run build
+COPY . .
+
+# Adicione este comando para remover a importação não utilizada
+RUN sed -i '/useContext/d' src/components/TransactionsTable/index.tsx
+
 RUN npm run build
+
 EXPOSE 3000
 
-CMD [ "npm","run","dev"]
-
-
-#COPY . .
-
-#EXPOSE 3000
-#CMD ["npm", "start"]
+CMD ["npm", "start"]
